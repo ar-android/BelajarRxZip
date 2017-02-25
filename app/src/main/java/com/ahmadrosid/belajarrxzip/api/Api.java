@@ -1,5 +1,7 @@
 package com.ahmadrosid.belajarrxzip.api;
 
+import android.util.Log;
+
 import com.ahmadrosid.belajarrxzip.api.response.GempaDirasakan;
 import com.ahmadrosid.belajarrxzip.api.response.GempaTerkini;
 import com.ahmadrosid.belajarrxzip.model.InfoGempa;
@@ -25,8 +27,9 @@ import rx.functions.Func2;
  * @Github https://github.com/ar-android
  * @Web http://ahmadrosid.com
  */
-
 public class Api {
+    private static final String TAG = "Api";
+
     static final OkHttpClient client = new OkHttpClient();
 
     static final String SCREET_KEY = "fd485a63d0af80d6b914892b4edeca01";
@@ -34,7 +37,7 @@ public class Api {
     static final String GEMPA_TERKINI = MAIN_URL + "bmkg?view=gempa-terkini&k=" + SCREET_KEY;
     static final String GEMPA_DIRASAKAN = MAIN_URL + "bmkg?view=gempa-dirasakan&k=" + SCREET_KEY;
 
-    public static Observable<InfoGempa> getInfoGempa(){
+    public static Observable<InfoGempa> getInfoGempa() {
         return Observable.zip(gempaTerkiniObservable(), gempaDirasakanObservable(), new Func2<GempaTerkini, GempaDirasakan, InfoGempa>() {
             @Override public InfoGempa call(GempaTerkini gempaTerkini, GempaDirasakan gempaDirasakan) {
                 InfoGempa data = new InfoGempa();
@@ -66,7 +69,7 @@ public class Api {
         });
     }
 
-    static Observable<GempaDirasakan> gempaDirasakanObservable(){
+    static Observable<GempaDirasakan> gempaDirasakanObservable() {
         return Observable.create(new Observable.OnSubscribe<GempaDirasakan>() {
             @Override public void call(final Subscriber<? super GempaDirasakan> subscriber) {
                 Request request = new Request.Builder()
